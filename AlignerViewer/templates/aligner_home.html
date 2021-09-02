@@ -1,0 +1,88 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="theme.css" type="text/css">
+</head>
+
+<body class="">
+  <div class="p-3">
+    <div class="container-fluid p-0 m-0">
+      <div class="row m-0 p-0">
+        <div class="p-1 border border-primary m-0 h-100 w-50" style="">
+          <div class="row m-0 p-0">
+            <div class="m-0 p-1 col-lg-2 col-5 col-md-5 col-sm-5"><a class="btn btn-primary m-0" href="{% url 'aligner' %}./?0" style="">Grab Scene</a></div>
+            <div class="m-0 p-1 col-lg-2 col-5 col-md-5 col-sm-5"><a class="btn btn-primary m-0" href="{% url 'aligner_set0' %}" style="">Set ROI</a>
+            </div>
+            <div class="p-0 m-0 col-lg-8 col-md-12 col-12 col-sm-12">
+              <h1 class="m-0 text-center p-0">Scene 0</h1>
+            </div>
+          </div>
+          <div class="row m-0 p-0">
+            <div class="col-md-12 m-0 p-0 border-top border-primary"><a href=""><img ismap class="img-fluid d-block mx-auto" src={{ scene0URI }} %}></a></div>
+          </div>
+        </div>
+        <div class="m-0 h-100 p-1 border border-primary w-50" style="">
+          <div class="row m-0 p-0">
+            <div class="m-0 p-1 col-lg-2 col-md-5 col-5 col-sm-5"><a class="btn btn-primary m-0" href="{% url 'aligner' %}./?1" style="">Grab Scene</a></div>
+            <div class="m-0 p-1 col-lg-2 col-md-5 col-5 col-sm-5"><a class="btn btn-primary m-0" href="{% url 'aligner_set1' %}" style="">Set ROI</a>
+            </div>
+            <div class="p-0 m-0 col-lg-8 col-md-12 col-12 col-sm-12">
+              <h1 class="m-0 text-center p-0">Scene 1</h1>
+            </div>
+          </div>
+          <div class="row m-0 p-0">
+            <div class="col-md-12 m-0 p-0 border-top border-primary"><a href=""><img ismap class="img-fluid d-block mx-auto" src={{ scene1URI }} %}></a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-3" style="" >
+    <div class="container w-100 m-0 p-0">
+      <div class="row w-100 m-0 p-0">
+        <div class="col-md-6 m-0 p-0" style="">
+          <div class="row m-0 p-0">
+            <div class="p-1 border border-primary m-0 h-100 w-50" style="">
+              <div class="row m-0 p-0">
+                <div class="p-0 m-0 col-md-12 col-12 col-sm-12 col-lg-12" style="">
+                  <h5 class="m-0 text-center p-0">Scene 0 ROI</h5>
+                </div>
+              </div>
+              <div class="row m-0 p-0">
+                <div class="col-md-12 m-0 p-0 border-top border-primary"><img class="img-fluid d-block mx-auto" src={{ object0URI }}></div>
+              </div>
+            </div>
+            <div class="m-0 h-100 p-1 border border-primary w-50" style="">
+              <div class="row m-0 p-0">
+                <div class="p-0 m-0 col-md-12 col-12 col-sm-12 col-lg-12" style="">
+                  <h5 class="m-0 text-center p-0" style="">Scene 1 ROI</h5>
+                </div>
+              </div>
+              <div class="row m-0 p-0">
+                <div class="col-md-12 m-0 p-0 border-top border-primary"><img class="img-fluid d-block mx-auto" src={{ object1URI }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 p-0 pl-3 m-0" style="">
+          <a class="btn btn-primary m-0 mb-2 mt-1 w-25" href="{% url 'aligner' %}./?inspect" style="">Inspect</a>
+          <input type="text" class="form-control m-0 mb-2 w-25 h-15" placeholder="X">
+          <input type="text" class="form-control m-0 mb-2 w-25 h-15" placeholder="Y">
+          <input type="text" class="form-control w-25 h-15" placeholder="Thetha">
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous" style=""></script>
+</body>
+
+</html>
