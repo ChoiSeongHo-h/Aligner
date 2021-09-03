@@ -39,11 +39,19 @@ kbhit
 ------------------------------------------------
 
 AlignerLauncher : Launch C++ and Python
+
 Aligner : C++ class, set and free share memory, set and free camera, image process, communicate with python
+
 PatternMatching : Manage GPU memory, launch CUDA kernel, image process
+
 CudaSupporter : Image process
+
 Grabber : Pylon camera class
+
 MemorySharing : Memory share with python
+
 Webcam : If you have no pylon camera, activate this
+
 AlignerConsts : Consts
+
 kbhit : Key press check
