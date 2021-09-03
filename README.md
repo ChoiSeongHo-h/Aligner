@@ -143,6 +143,7 @@ kbhit : Key press check function
 
 Result
 Existing PC for aligner takes 200ms or more per image, and the price is more than 600$(2021.08.).
+
 On the other hand, this software does not require Windows and input/output devices, and takes less than 50ms per image.
 
 
