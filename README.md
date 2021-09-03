@@ -1,13 +1,19 @@
 # Aligner
+
 Vision Align Software with CUDA, C++ and Python on Nvidia Jetson Nano
 
 
 An aligner is a device that uses two cameras to correct a rotated and shifted object.
+
 Each camera detects rotation and shifting of the region of interest.
+
 This software locates the changed region of interest.
 
+
 OpenCV's template matching is vulnerable to rotation and cannot be used.
+
 So I implemented an algorithm using GPU.
+
 
 CUDA, C++ (Calculation)  <----- share memory -----> Python(Web viewer, Django)
 
@@ -15,23 +21,37 @@ CUDA, C++ (Calculation)  <----- share memory -----> Python(Web viewer, Django)
 
 CMakeLists.txt -> Edit cuda version
 
+
 mkdir build
+
 cd build
+
 cmake ..
+
 make
+
 ./Aligner
 
 ------------------------------------------------
 
 structure(CUDA, C++) :
+
 AlignerLauncher
+
 --Aligner
+
 ----PatternMatching
+
 ------CudaSupporter
+
 ----Grabber
+
 ----MemorySharing
+
 ----//Webcam
+
 AlignerConsts
+
 kbhit
 
 <----- share memory -----> Python(Web viewer, Django)
