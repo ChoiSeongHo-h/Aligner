@@ -141,6 +141,14 @@ kbhit : Key press check function
 ------------------------------------------------
 
 
+Result
+Existing PC for aligner takes 200ms or more per image, and the price is more than 600$(2021.08.).
+On the other hand, this software does not require ㅉindows and input/output devices and takes less than 50ms per image.
+
+
+------------------------------------------------
+
+
 ![슬라이드1](https://user-images.githubusercontent.com/72921481/131960995-5ba56429-e7fe-4ef9-8433-94862865c6be.JPG)
 ![슬라이드2](https://user-images.githubusercontent.com/72921481/131961001-6ca9769a-fae9-4a34-9a41-63c38e88da90.JPG)
 ![슬라이드3](https://user-images.githubusercontent.com/72921481/131961003-2bf304bd-980c-4aea-9447-1a54c5ed4f94.JPG)
@@ -167,7 +175,6 @@ kbhit : Key press check function
 ![슬라이드24](https://user-images.githubusercontent.com/72921481/131961048-26a8f6ee-f79b-4962-aa33-15bfde31ed4c.JPG)
 ![슬라이드25](https://user-images.githubusercontent.com/72921481/131961050-67d683dd-bff9-4a9e-a5d5-dd0c161353d5.JPG)
 ![슬라이드26](https://user-images.githubusercontent.com/72921481/131961052-545da30d-5d11-4cbf-a2de-c5a488e7b47b.JPG)
-![슬라이드27](https://user-images.githubusercontent.com/72921481/131961053-f1a4867f-aed5-4f33-a978-6b74a2385dba.JPG)
-![슬라이드28](https://user-images.githubusercontent.com/72921481/131961055-61cc4b75-2801-46e5-9184-883b13f440f8.JPG)
-
-
+![슬라이드27](https://user-images.githubusercontent.com/72921481/131961903-39c26955-3a64-4157-ae3c-486d2d423800.JPG)
+![슬라이드28](https://user-images.githubusercontent.com/72921481/131961904-7a07db63-4818-4cdf-bc60-045b2390aeb7.JPG)
+![슬라이드29](https://user-images.githubusercontent.com/72921481/131961907-ce865d66-367b-4971-9832-0fa5dd292406.JPG)
