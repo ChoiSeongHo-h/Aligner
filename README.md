@@ -43,6 +43,7 @@ Idea of finding a rotated object
 
 2. The circular integral of an object is maintained as it rotates around the center of the circle
 
+
 At 2, circular integration is slow because it is difficult to utilize the GPU's shared memory and caching.
 
 At 1, Specify a rectangular area instead of a circular area, Can utilize the GPU's shared memory and caching, which is fast.
@@ -69,21 +70,21 @@ Algorithm progress (CUDA, C++, image process)
 
 6. Search object in ROI(using CUDA)
 
-6.1. moments vector comparison
+6. 1. moments vector comparison
 
-6.1.1. Compute the moments vector for each pixel in the ROI
+6. 1.1. Compute the moments vector for each pixel in the ROI
 
-6.1.2. Compare the moments vector of the object with the moments vector of the pixels in the ROI.
+6. 1.2. Compare the moments vector of the object with the moments vector of the pixels in the ROI.
 
-6.1.3. A candidate group is extracted by applying an adaptive threshold.
+6. 1.3. A candidate group is extracted by applying an adaptive threshold.
 
-6.2. circular integral vector comparison
+6. 2. circular integral vector comparison
 
-6.2.1. Calculate a circular integral vector with a radius dimension for the candidates.
+6. 2.1. Calculate a circular integral vector with a radius dimension for the candidates.
 
-6.2.2. Compare the circular integral vector of the object with the circular integral vector of the pixels in the ROI. get correlation coefficient
+6. 2.2. Compare the circular integral vector of the object with the circular integral vector of the pixels in the ROI. get correlation coefficient
 
-6.2.3. Extract the coordinates with the highest correlation coefficient
+6. 2.3. Extract the coordinates with the highest correlation coefficient
 
 
 ------------------------------------------------
