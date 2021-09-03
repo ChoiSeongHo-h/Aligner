@@ -39,9 +39,7 @@ make
 
 Idea of finding a rotated object
 
-1. In a circular region, an object rotated about the midpoint of the region has the same mean, variance, skewness, and kurtosis as compared to the original.
-
-(the mean, variance, skewness, and kurtosis are called moments vectors)
+1. In a circular region, an object rotated about the midpoint of the region has the same mean, variance, skewness, and kurtosis as compared to the original(the mean, variance, skewness, and kurtosis are called moments vectors).
 
 2. The circular integral of an object is maintained as it rotates around the center of the circle
 
