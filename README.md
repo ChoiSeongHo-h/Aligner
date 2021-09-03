@@ -122,16 +122,17 @@ AlignerLauncher : Launch C++ and Python
 
 Aligner : Set and free shared memory, set and free camera, image process, communicate with python
 
-PatternMatching : Manage GPU memory, launch CUDA kernel, image process
+PatternMatching : Manage GPU memory, launch CUDA kernel, image process using OpenCV
 
-CudaSupporter : Image process
+CudaSupporter : Image process, use CUDA to find the moment vector and circular integral vector for each pixel.
 
-Grabber : Pylon camera class
+Grabber : Pylon camera class, set and dispose camera and grab
 
-MemorySharing : Memory share with python
+MemorySharing : Memory share with python. Sharing memory in bytes. Images are shared as a one-dimensional byte array. 
+Numbers greater than 255 are shared by the number's quotient and remainder.
 
-Webcam : If you have no pylon camera, activate this
+Webcam : If you have no pylon camera, activate this and modify CMakeLists
 
 AlignerConsts : Consts
 
-kbhit : Key press check
+kbhit : Key press check function
