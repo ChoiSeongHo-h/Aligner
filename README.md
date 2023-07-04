@@ -1,153 +1,95 @@
 # Aligner
+## Overview
+Circuit Aligner with CUDA
+- **Rotation-invariant template matching** considering GPU architecture
+- Providing a **web frontend** with Django
+- Available **at 1/10 the price** of traditional products
 
-Vision Aligning Software with CUDA, C++ and Python on Nvidia Jetson Nano
+## 1 Rotation-invariant template matching considering GPU architecture
+Accelerating **rotation-invariant template matching** with **CUDA parallel algorithms** while considering **GPU architecture**
 
+### 1.1 Motivation
+![image](https://github.com/ChoiSeongHo-h/Aligner/assets/72921481/8637c327-4f86-447e-9f36-2d58a526a526)
+- Red crosshairs: Characteristic parts of aligned circuits saved in the aligner
+- Blue crosshairs: Characteristic parts of the misaligned circuit that entered the aligner
 
-An aligner is a device that uses two cameras to correct a rotated and shifted object.
+Rotation-invariant template matching is necessary to compute the amount of rotation and translation of a circuit. 
 
-Each camera detects rotation and shifting of the region of interest.
+The user wants to align the misaligned circuit by rotating and translating it in two dimensions. The aligned circuit already has the characteristic patches of the aligned circuit stored. The aligner finds the same patches in the misaligned circuit and calculates the amount of rotation and translation of the circuit based on the degree of misalignment between the patches.
 
-This software locates the changed region of interest.
+### 1.2 Template matching overview
+![image](https://github.com/ChoiSeongHo-h/Aligner/assets/72921481/b12f0802-473a-4d2d-ae37-5b8a19c2a0fb)
 
+Template matching performs the following coarse to fine search:
+1. Coarse search: Fast search based on pixel statistics, taking advantage of the GPU architecture.
+2. Fine search: Precise search using circular sum
 
-OpenCV's template matching is vulnerable to rotation and cannot be used.
+### 1.3 Step 1: Coarse Search
+Fast search based on pixel statistics, taking advantage of the GPU architecture.
+A coarse search is performed as follows:
+1. Find the 1st-4th order moments of a reference patch.
+2. Construct an ROI around a reference patch in a misaligned circuit image.
+3. Traverse all pixels in the ROI to calculate the 1st-4th order moments. The region where the moments are calculated is centred on the pixel being traversed and has the same size as the reference patch.
+4. Compare the reference patch moment vector to the moment vector of all patches in the ROI.
+5. Extract candidate regions using an adaptive threshold.
 
-So I implemented an algorithm using GPU.
+#### 1.3.1 1st to 4th Order Moments
+![image](https://github.com/ChoiSeongHo-h/Aligner/assets/72921481/766b1c7f-d576-4d15-894c-78d1a3e3f256)
 
+The 1st to 4th order moments represent the mean, variance, skewness, and kurtosis of the pixels in the patch. These features are invariant to rotation or translation of the patch. For example, a patch with a mean of 3 will still have a mean of 3 if you move it slightly to the right.
 
-CUDA, C++ (Calculation)  <----- share memory -----> Python(Web viewer, Django)
 
+#### 1.3.2 Grid, Block, and Thread Structures and Shared Memory
+![image](https://github.com/ChoiSeongHo-h/Aligner/assets/72921481/4a4fddc5-d8ab-4ac8-9759-01fb8f81bb24)
 
-------------------------------------------------
+The unit for performing kernels (functions) on the GPU is a grid. A grid is made up of blocks. Blocks are composed of threads. Threads within the same block can access shared memory and share data. Shared memory is very fast, so it should be actively used to improve performance.
 
+![image](https://github.com/ChoiSeongHo-h/Aligner/assets/72921481/7eb25eff-6ea2-4bc0-9c91-f6c010b5384f)
 
-(CMakeLists.txt -> Edit cuda version)
 
-mkdir build
+In Step 1, the aligner's grid consists of (16 columns/16 rows/16) blocks. Each block consists of (16 x 16) threads. Each thread is responsible for one patch to compute moments.
 
-cd build
+Within each block, threads share a pixel area of (16+margin x 16+margin). Due to the limitations of the Jetson Nano, it is not possible to allocate a large amount of shared memory.
 
-cmake ..
+For speed, all GPU memory, including shared memory, is pre-allocated and the image is uploaded.
 
-make
+### 1.4 Step 2: Fine Search
+![image](https://github.com/ChoiSeongHo-h/Aligner/assets/72921481/9043638e-e927-44c6-80f0-1a1472cf250d)
 
-./Aligner
+The aligner accumulates pixel values along a circular path. Each radius of the circle has a cumulative value. With n radiuses, an n-dimensional vector of accumulated values can be constructed. This vector encodes the rotation-invariant features of the image.
 
+1. Find the circular sum of the reference patches.
+2. Perform a circular sum in parallel similar to Step1 on the candidates that passed the adaptive threshold in Step1. Each thread is responsible for two circular paths.
+3. Apply NCC between the reference and candidate vectors to pick the pixel with the maximum value.
 
-------------------------------------------------
+#### 1.4.1 Algorithms for accelerating parallel computing
+As mentioned in Step 2, each thread is responsible for two circular paths. One thread is responsible for the k th circle and the n-k th circle to reduce bottlenecks between threads.
 
+Additionally, a reduction algorithm is used to extract maxima and sums to accelerate the process.
 
-Idea of finding a rotated object
+## 2 Providing a web frontend with Django
+![image](https://github.com/ChoiSeongHo-h/Aligner/assets/72921481/ef185b03-c6a6-4db1-aed5-9baf36ac70ea)
 
-1. In a circular region, an object rotated about the midpoint of the region has the same mean, variance, skewness, and kurtosis as compared to the original(the mean, variance, skewness, and kurtosis are called moments vectors).
+Django provides a web interface. Users can access the aligner from any device, not just a PC. In addition to PC, the responsive web is also conveniently accessible on mobile.
 
-2. The circular integral of an object is maintained as it rotates around the center of the circle
+The sorter backend and Django frontend send and receive data through shared memory. For image sharing, a reference-only object is used to minimise latency.
 
+## 3 Available at 1/10 the price of traditional products
 
-At 2, circular integration is slow because it is difficult to utilize the GPU's shared memory and caching.
+At the time the aligner was developed, previous circuit alignment PCs cost around $1,000. However, this aligner, based on Jetson Nano, costs around $1000. Despite the low price, there is no reduction in performance (search time < 50ms).
 
-At 1, Specify a rectangular area instead of a circular area, Can utilize the GPU's shared memory and caching, which is fast.
+## 4 File Description
+- AlignerLauncher: main()
+- Aligner: sets up and tears down shared memory, sets up and tears down cameras, processes images, and communicates with the web.
+- PatternMatching: Manages GPU memory, runs the CUDA kernel, and performs image processing using OpenCV.
+- CudaSupporter: Image processing, finding the moment vector and circular sum vector for each pixel using CUDA.
+- Grabber: Pylon camera classes, setting up and destroying cameras and grabbers
+- MemorySharing: Sharing memory with the web.
+- Webcam: Enables the webcam if there is no Pylon camera.
+- AlignerConsts: Constants
+- kbhit: checks for key presses
 
-However, it is inaccurate because it is not a circular region.
-
-Therefore, the moment vector is found in the rectangular area to quickly determine the candidate group. After that, the correct coordinates are returned by using 2.
-
-
-------------------------------------------------
-
-
-Algorithm progress (CUDA, C++, image process)
-
- 1. Grab Scene
-
- 2. Set object(pattern)
-
- 3. Compute object's info (1st~4th moments vector, circular integral vector with a radius dimension, ...)
-
- 4. Specify the ROI(search area, near the object) in the scene
-
- 5. Grab rotated and shifted Scene
-
- 6. Search object in ROI(using CUDA)
-
- 6.1. moments vector comparison
-
- 6.1.1. Compute the moments vector for each pixel in the ROI
-
- 6.1.2. Compare the moments vector of the object with the moments vector of the pixels in the ROI.
-
- 6.1.3. A candidate group is extracted by applying an adaptive threshold.
-
- 6.2. circular integral vector comparison
-
- 6.2.1. Calculate a circular integral vector with a radius dimension for the candidates.
-
- 6.2.2. Compare the circular integral vector of the object with the circular integral vector of the pixels in the ROI. get correlation coefficient
-
- 6.2.3. Extract the coordinates with the highest correlation coefficient
-
-
-------------------------------------------------
-
-
-structure(CUDA, C++) :
-
-AlignerLauncher
-
-----Aligner
-
---------PatternMatching
-
-------------CudaSupporter
-
---------Grabber
-
---------MemorySharing
-
---------//Webcam
-
---------kbhit
-
-AlignerConsts
-
-
-
-<----- shared memory -----> Python(Web viewer, Django)
-
-
-------------------------------------------------
-
-
-AlignerLauncher : Launch C++ and Python
-
-Aligner : Set and free shared memory, set and free camera, image process, communicate with python
-
-PatternMatching : Manage GPU memory, launch CUDA kernel, image process using OpenCV
-
-CudaSupporter : Image process, use CUDA to find the moment vector and circular integral vector for each pixel.
-
-Grabber : Pylon camera class, set and dispose camera and grab
-
-MemorySharing : Memory share with python. Sharing memory in bytes. Images are shared as a one-dimensional byte array. 
-Numbers greater than 255 are shared by the number's quotient and remainder.
-
-Webcam : If you have no pylon camera, activate this and modify CMakeLists
-
-AlignerConsts : Consts
-
-kbhit : Key press check function
-
-
-------------------------------------------------
-
-
-Result
-Existing PC for aligner takes 200ms or more per image, and the price is more than 600$(2021.08.).
-
-On the other hand, this software does not require Windows and input/output devices, and takes less than 50ms per image.
-
-
-------------------------------------------------
+## 5 Presentation slides
 
 
 ![슬라이드1](https://user-images.githubusercontent.com/72921481/131960995-5ba56429-e7fe-4ef9-8433-94862865c6be.JPG)
