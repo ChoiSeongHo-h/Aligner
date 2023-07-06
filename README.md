@@ -76,7 +76,7 @@ The sorter backend and Django frontend send and receive data through shared memo
 
 ## 3 Available at 1/10 the price of traditional products
 
-At the time the aligner was developed, previous circuit alignment PCs cost around $1,000. However, this aligner, based on Jetson Nano, costs around $1000. Despite the low price, there is no reduction in performance (search time < 50ms).
+At the time the aligner was developed, previous circuit alignment PCs cost around $1,000. However, this aligner, based on Jetson Nano, costs around $100. Despite the low price, there is no reduction in performance (search time < 50ms).
 
 ## 4 File Description
 - AlignerLauncher: main()
