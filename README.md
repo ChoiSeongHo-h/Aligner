@@ -47,7 +47,7 @@ The unit for performing kernels (functions) on the GPU is a grid. A grid is made
 ![image](https://github.com/ChoiSeongHo-h/Aligner/assets/72921481/7eb25eff-6ea2-4bc0-9c91-f6c010b5384f)
 
 
-In Step 1, the aligner's grid consists of (16 columns/16 rows/16) blocks. Each block consists of (16 x 16) threads. Each thread is responsible for one patch to compute moments.
+In Step 1, the aligner's grid consists of (columns/16 x rows/16) blocks. Each block consists of (16 x 16) threads. Each thread is responsible for one patch to compute moments.
 
 Within each block, threads share a pixel area of (16+margin x 16+margin). Due to the limitations of the Jetson Nano, it is not possible to allocate a large amount of shared memory.
 
